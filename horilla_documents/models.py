@@ -36,7 +36,7 @@ def document_create(instance):
         document = Document.objects.get_or_create(
             employee_id=employee,
             document_request_id=instance,
-            defaults={"title" : f"Upload {instance.title}"}
+            defaults={"title": f"Upload {instance.title}"},
         )
         document[0].title = f"Upload {instance.title}"
         document[0].save()
@@ -92,7 +92,8 @@ class Document(HorillaModel):
     def clean(self, *args, **kwargs):
         super().clean(*args, **kwargs)
         file = self.document
-
+        if len(self.title) < 3:
+            raise ValidationError({"title": _("Title must be at least 3 characters")})
         if file and self.document_request_id:
             format = self.document_request_id.format
             max_size = self.document_request_id.max_size
@@ -107,12 +108,11 @@ class Document(HorillaModel):
                 raise ValidationError(f"Please upload {format} file only.")
 
     def save(self, *args, **kwargs):
-        if len(self.title) < 3:
-            raise ValidationError(_("Title must be at least 3 characters"))
         super().save(*args, **kwargs)
         if self.is_digital_asset:
-            if apps.is_installed('asset'):
+            if apps.is_installed("asset"):
                 from asset.models import Asset, AssetCategory
+
                 asset_category = AssetCategory.objects.get_or_create(
                     asset_category_name="Digital Asset"
                 )

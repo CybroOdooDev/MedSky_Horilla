@@ -7,7 +7,7 @@
   method="post"
   hx-encoding="multipart/form-data"
 >
-  {{form.errors}} {{form.as_p}}
+  {{form.non_field_errors}} {{form.as_p}}
 </form>
 <script>
   $(document).ready(function () {

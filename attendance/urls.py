@@ -141,8 +141,9 @@ urlpatterns = [
         attendance.views.search.own_attendance_sort,
         name="own-attendance-filter",
     ),
-    path("clock-in", attendance.views.clock_in_out.clock_in, name="clock-in"),
-    path("clock-out", attendance.views.clock_in_out.clock_out, name="clock-out"),
+    # path("clock-in", attendance.views.clock_in_out.clock_in, name="clock-in"), 
+    # path("clock-out", attendance.views.clock_in_out.clock_out, name="clock-out"),
+    # Medsky Airways don't need clock in/out button 
     path(
         "on-time-view/",
         views.on_time_view,
