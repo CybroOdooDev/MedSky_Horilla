@@ -1,0 +1,65 @@
+{% load i18n %}
+{% if messages %}
+    <div class="oh-wrapper">
+        {% for message in messages %}
+        <div class="oh-alert-container">
+            <div class="oh-alert oh-alert--animated {{ message.tags }}">
+                {{ message }}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <span hx-get="{% url 'restrict-filter' %}?{{pd}}" hx-target="#restrictDays" hx-trigger="load"></span>
+{% endif %}
+<div class="oh-modal__dialog-header">
+    <span class="oh-modal__dialog-title" id="editDialogDialog">{% trans "Create Restricted Day" %}</span>
+    <button class="oh-modal__close" aria-label="Close">
+        <ion-icon name="close-outline"></ion-icon>
+    </button>
+</div>
+<div class="oh-modal__dialog-body">
+    <form hx-post="{% url 'restrict-creation' %}?{{pd}}" hx-target="#objectCreateModalTarget" class="oh-profile-section" id="leaveRestrictForm">
+        <label class="oh-label d-block" for="{{ form.title.id_for_label }}">{% trans "Title" %}</label>
+        {{form.title}} {{form.title.errors}}
+        <div class="row">
+            <div class="col-12 col-sm-12 col-md-6 col-lg-6">
+                <div class="oh-input__group">
+                    <label class="oh-label d-block" for="{{ form.start_date.id_for_label }}">{% trans "Start Date" %}</label>
+                    {{form.start_date}} {{form.start_date.errors}}
+                </div>
+            </div>
+            <div class="col-12 col-sm-12 col-md-6 col-lg-6">
+                <div class="oh-input__group">
+                    <label class="oh-label d-block" for="{{ form.end_date.id_for_label }}">{% trans "End Date" %}</label>
+                    {{form.end_date}} {{form.end_date.errors}}
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 col-sm-12 col-md-6 col-lg-6">
+                <div class="oh-input__group">
+                    <label class="oh-label d-block" for="{{ form.department.id_for_label }}">{% trans "Department" %}</label>
+                    {{form.department}} {{form.department.errors}}
+                </div>
+            </div>
+            <div class="col-12 col-sm-12 col-md-6 col-lg-6" id="restrictLeaveJobPosition">
+                {% include "leave/job_position_field.html" %}
+            </div>
+        </div>
+        <label class="oh-label d-block" for="{{ form.description.id_for_label }}">{% trans "Description" %}</label>
+        {{form.description}} {{form.description.errors}}
+        <div class="oh-modal__dialog-footer p-0 pt-2">
+            <button type="submit" class="oh-btn oh-btn--secondary oh-btn--shadow">
+                {% trans "Save" %}
+            </button>
+        </div>
+    </form>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $("select").on("select2:select", function (e) {
+            $(this).closest("select")[0].dispatchEvent(new Event("change"));
+        });
+    });
+</script>
