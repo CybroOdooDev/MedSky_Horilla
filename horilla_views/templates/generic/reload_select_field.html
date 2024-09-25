@@ -1,0 +1,21 @@
+<div id="{{dynamic_id}}">
+    {{field}}
+</dic>
+
+<script>
+$("#{{dynamic_id}} [name={{field.name}}]").change(function (e) { 
+    values = $(this).val();
+    if (values == "dynamic_create") {
+      $("#modalButton{{field_tuple.0}}").click()
+    }else if (values.includes("dynamic_create")) {
+      let index = values.indexOf("dynamic_create");
+      values.splice(index, 1);
+      $(this).val(values).change();
+      $("#{{request.GET.view_id}} #modalButton{{field.name}}").parent().find('input[name=dynamic_initial]').val(values)
+      $("#{{request.GET.view_id}} #reload-field{{field.name}}{{request.GET.view_id}}").find('input[name=dynamic_initial]').val(values)
+      $("#{{request.GET.view_id}} #modalButton{{field.name}}").click()
+    
+    }
+});
+</script>
+  
