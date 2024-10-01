@@ -183,7 +183,17 @@ class ZKBioAttendance(Thread):
                                         .order_by("in_datetime")
                                         .last()
                                     )
-                                    if not last_none_activity:
+                                    # punch_codes = [
+                                    #     ("0", "Check In"),
+                                    #     ("1", "Check Out"),
+                                    #     ("2", "Break Out"),
+                                    #     ("3", "Break In"),
+                                    #     ("4", "Overtime In"),
+                                    #     ("5", "Overtime Out"),
+                                    #     ("255", "Duplicate"),
+                                    # ]
+
+                                    if punch_code in {0, 3, 4}:
                                         try:
                                             clock_in(
                                                 Request(
@@ -199,7 +209,7 @@ class ZKBioAttendance(Thread):
                                             )
 
                                             continue
-                                    else:
+                                    elif punch_code in {1, 2, 5}:
                                         try:
                                             clock_out(
                                                 Request(
@@ -1878,12 +1888,21 @@ def zk_biometric_device_attendance(device_id):
                         .order_by("in_datetime")
                         .last()
                     )
-                    if not last_none_activity:
+                    # punch_codes = [
+                    #     ("0", "Check In"),
+                    #     ("1", "Check Out"),
+                    #     ("2", "Break Out"),
+                    #     ("3", "Break In"),
+                    #     ("4", "Overtime In"),
+                    #     ("5", "Overtime Out"),
+                    #     ("255", "Duplicate"),
+                    # ]
+                    if punch_code in {0, 3, 4}:
                         try:
                             clock_in(request_data)
                         except Exception as error:
                             logger.error("Got an error : ", error)
-                    else:
+                    elif punch_code in {1, 2, 5}:
                         try:
                             clock_out(request_data)
                         except Exception as error:
